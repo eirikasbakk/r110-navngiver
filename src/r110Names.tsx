@@ -1,8 +1,5 @@
-// r110Names.ts
-// Ferdig normaliserte verdier (kan brukes direkte i navn)
-
 export const NAME_OPTIONS: Record<string, string[]> = {
-  // 3 Registrerte data
+  // ✅ Registrerte data – brukes som LEDD 2
   rg: [
     "landmaaling",
     "skanning",
@@ -13,7 +10,7 @@ export const NAME_OPTIONS: Record<string, string[]> = {
     "registrert-paa-anlegg",
   ],
 
-  // 4.2 Grunnlagsmodeller
+  // ✅ Grunnlagsmodeller
   m_g: [
     "arealplansituasjon",
     "befolkning",
@@ -36,7 +33,7 @@ export const NAME_OPTIONS: Record<string, string[]> = {
     "vaer-og-klima",
   ],
 
-  // 4.3 Fagmodeller
+  // ✅ Fagmodeller
   m_f: [
     "arealplan",
     "belysning",
@@ -66,7 +63,7 @@ export const NAME_OPTIONS: Record<string, string[]> = {
     "vegoppmerking",
   ],
 
-  // 5.2 Presentasjoner
+  // ✅ Resultatdata – Presentasjoner
   r_p: [
     "presentasjonsmodell",
     "animasjonsfilm",
@@ -75,17 +72,16 @@ export const NAME_OPTIONS: Record<string, string[]> = {
     "prosjektpresentasjoner",
   ],
 
-  // 5.3 Datasett
+  // ✅ Resultatdata – Datasett
   r_ds: [
     "stikningsdata",
     "maskinstyringsdata",
     "nvdb-og-fkb-grunnlag",
   ],
 
-  // 5.4 Dokumenter
+  // ✅ Resultatdata – Dokumenter
   r_d: [
     "tegninger",
     "rapporter",
   ],
 };
-``

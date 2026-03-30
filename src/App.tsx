@@ -3,11 +3,10 @@ import "./App.css";
 import { NAME_OPTIONS } from "./r110Names";
 
 type DocType = "rg" | "m" | "r";
-type Category = string;
 
 export default function App() {
   const [docType, setDocType] = useState<DocType>("m");
-  const [category, setCategory] = useState<Category>("f");
+  const [category, setCategory] = useState("");
   const [name, setName] = useState("");
   const [runningNumber, setRunningNumber] = useState("");
   const [description, setDescription] = useState("");
@@ -15,19 +14,21 @@ export default function App() {
   const [contract, setContract] = useState("");
   const [copied, setCopied] = useState(false);
 
+  // ✅ Navn er kun aktuelt for g og f
   const nameKey =
-    docType === "m"
+    docType === "m" && (category === "g" || category === "f")
       ? `m_${category}`
       : docType === "r"
       ? `r_${category}`
-      : "rg";
+      : null;
 
-  const nameOptions = NAME_OPTIONS[nameKey] ?? [];
+  const nameOptions = nameKey ? NAME_OPTIONS[nameKey] ?? [] : [];
 
+  // ✅ Output – korrekt R110-struktur
   const output = [
     docType,
     category,
-    name,
+    nameKey ? name : null,
     runningNumber,
     description,
     phase,
@@ -58,12 +59,7 @@ export default function App() {
               const v = e.target.value as DocType;
               setDocType(v);
 
-              // sett gyldig startkategori
-              if (v === "m") setCategory("f");
-              if (v === "r") setCategory("p");
-              if (v === "rg") setCategory("");
-
-              // 🔴 nullstill ALT som avhenger av ledd 1
+              setCategory("");
               setName("");
               setRunningNumber("");
               setDescription("");
@@ -84,17 +80,21 @@ export default function App() {
             value={category}
             onChange={(e) => {
               setCategory(e.target.value);
-
-              // 🔴 navn er ikke lenger gyldig
               setName("");
             }}
           >
+            <option value="">– velg –</option>
+
             {docType === "m" && (
               <>
                 <option value="g">g – Grunnlagsmodell</option>
                 <option value="f">f – Fagmodell</option>
+                <option value="s">s – Situasjonsmodell</option>
+                <option value="t">t – Tverrfaglig modell</option>
+                <option value="sa">sa – Samordningsmodell</option>
               </>
             )}
+
             {docType === "r" && (
               <>
                 <option value="p">p – Presentasjon</option>
@@ -102,27 +102,36 @@ export default function App() {
                 <option value="d">d – Dokument</option>
               </>
             )}
+
+            {docType === "rg" && (
+              NAME_OPTIONS.rg.map((rg) => (
+                <option key={rg} value={rg}>
+                  {rg}
+                </option>
+              ))
+            )}
           </select>
         </div>
 
-        {/* LEDD 3 */}
-        <div className="row">
-          <label>Ledd 3 – Navn</label>
-          <select
-            value={name}
-            disabled={nameOptions.length === 0}
-            onChange={(e) => setName(e.target.value)}
-          >
-            <option value="">– velg –</option>
-            {nameOptions.map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* ✅ LEDD 3 – KUN for g og f */}
+        {nameKey && (
+          <div className="row">
+            <label>Ledd 3 – Navn</label>
+            <select
+              value={name}
+              disabled={nameOptions.length === 0}
+              onChange={(e) => setName(e.target.value)}
+            >
+              <option value="">– velg –</option>
+              {nameOptions.map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
-        {/* LEDD 4 */}
         <div className="row">
           <label>Ledd 4 (valgfri) – Løpenummer</label>
           <input
@@ -132,7 +141,6 @@ export default function App() {
           />
         </div>
 
-        {/* LEDD 5 */}
         <div className="row">
           <label>Ledd 5 (valgfri) – Beskrivelse</label>
           <input
@@ -142,7 +150,6 @@ export default function App() {
           />
         </div>
 
-        {/* LEDD 6 */}
         <div className="row">
           <label>Ledd 6 (valgfri) – Prosjektfase</label>
           <input
@@ -152,7 +159,6 @@ export default function App() {
           />
         </div>
 
-        {/* LEDD 7 */}
         <div className="row">
           <label>Ledd 7 (valgfri) – Entreprise</label>
           <input
@@ -163,7 +169,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* RESULTAT */}
       <div className="card">
         <h2>Resultat</h2>
 
