@@ -1,4 +1,27 @@
 export const NAME_OPTIONS: Record<string, string[]> = {
+  // ✅ Grunnlagsdata – brukes som LEDD 2 (tema fra Geonorge)
+  gd: [
+    "annen",
+    "basis-geodata",
+    "befolkning",
+    "eiendom",
+    "energi",
+    "flyfoto",
+    "forurensning",
+    "friluftsliv",
+    "geologi",
+    "hoeydedata",
+    "kulturminner",
+    "kyst-og-fiskeri",
+    "landbruk",
+    "landskap",
+    "natur",
+    "plan",
+    "samferdsel",
+    "samfunnssikkerhet",
+    "vaer-og-klima",
+  ],
+
   // ✅ Registrerte data – brukes som LEDD 2
   rg: [
     "landmaaling",
@@ -73,15 +96,8 @@ export const NAME_OPTIONS: Record<string, string[]> = {
   ],
 
   // ✅ Resultatdata – Datasett
-  r_ds: [
-    "stikningsdata",
-    "maskinstyringsdata",
-    "nvdb-og-fkb-grunnlag",
-  ],
+  r_ds: ["stikningsdata", "maskinstyringsdata", "nvdb-og-fkb-grunnlag"],
 
   // ✅ Resultatdata – Dokumenter
-  r_d: [
-    "tegninger",
-    "rapporter",
-  ],
+  r_d: ["tegninger", "rapporter"],
 };

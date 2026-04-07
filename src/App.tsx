@@ -2,7 +2,15 @@ import { useState } from "react";
 import "./App.css";
 import { NAME_OPTIONS } from "./r110Names";
 
-type DocType = "rg" | "m" | "r";
+type DocType = "gd" | "rg" | "m" | "r";
+
+function prettyLabel(value: string) {
+  // Gjør "basis-geodata" -> "Basis geodata"
+  return value
+    .split("-")
+    .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w))
+    .join(" ");
+}
 
 export default function App() {
   const [docType, setDocType] = useState<DocType>("m");
@@ -14,7 +22,10 @@ export default function App() {
   const [contract, setContract] = useState("");
   const [copied, setCopied] = useState(false);
 
-  // ✅ Navn er kun aktuelt for g og f
+  // ✅ LEDD 3 (Navn) er kun aktuelt for:
+  // - Modeller: m + (g|f)
+  // - Resultatdata: r + (p|ds|d)
+  // ✅ Ikke aktuelt for gd og rg (da utgår ledd 3)
   const nameKey =
     docType === "m" && (category === "g" || category === "f")
       ? `m_${category}`
@@ -67,9 +78,10 @@ export default function App() {
               setContract("");
             }}
           >
-            <option value="rg">rg – Registrerte data</option>
+            <option value="gd">gd – Grunnlagsdata</option>
             <option value="m">m – Modeller</option>
             <option value="r">r – Resultatdata</option>
+            <option value="rg">rg – Registrerte data</option>
           </select>
         </div>
 
@@ -85,6 +97,15 @@ export default function App() {
           >
             <option value="">– velg –</option>
 
+            {/* gd – Grunnlagsdata (tema fra Geonorge) */}
+            {docType === "gd" &&
+              (NAME_OPTIONS.gd ?? []).map((t) => (
+                <option key={t} value={t}>
+                  {prettyLabel(t)}
+                </option>
+              ))}
+
+            {/* m – Modeller */}
             {docType === "m" && (
               <>
                 <option value="g">g – Grunnlagsmodell</option>
@@ -95,6 +116,7 @@ export default function App() {
               </>
             )}
 
+            {/* r – Resultatdata */}
             {docType === "r" && (
               <>
                 <option value="p">p – Presentasjon</option>
@@ -103,17 +125,17 @@ export default function App() {
               </>
             )}
 
-            {docType === "rg" && (
-              NAME_OPTIONS.rg.map((rg) => (
+            {/* rg – Registrerte data (brukes som LEDD 2) */}
+            {docType === "rg" &&
+              (NAME_OPTIONS.rg ?? []).map((rg) => (
                 <option key={rg} value={rg}>
                   {rg}
                 </option>
-              ))
-            )}
+              ))}
           </select>
         </div>
 
-        {/* ✅ LEDD 3 – KUN for g og f */}
+        {/* ✅ LEDD 3 – kun når nameKey finnes (m_g, m_f, r_*) */}
         {nameKey && (
           <div className="row">
             <label>Ledd 3 – Navn</label>
